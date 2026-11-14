@@ -34,4 +34,4 @@ All changes go through a branch, a PR and green CI ([ADR 0003](docs/decisions/00
 - A rate-limited public demo, plus a "bring your own task" option only for allowlisted visitors
 
 ## Status
-In progress: Phase 0 (repo setup). Plan: [docs/PLAN.md](docs/PLAN.md)
+In progress: Phase 1 (event schema). The demo task is a **football finance analyst** comparing Premier League clubs and sports-betting operators from their public filings ([ADR 0004](docs/decisions/0004-demo-task-and-data-sources.md)). Plan: [docs/PLAN.md](docs/PLAN.md)
