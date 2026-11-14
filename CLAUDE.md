@@ -12,6 +12,7 @@ A supervisor agent breaks a business task into steps and delegates to specialist
 - **Claude writes boilerplate**: project config, CI, FastAPI/SSE plumbing, DB models, Docker, fakes for tests, export scripts.
 - **Small choices: just decide** and mention the choice in one line. **Architectural choices: ask** with options and a recommendation, then record the decision in `docs/decisions/` (never edit an accepted record; supersede it).
 - Explain *why* something works, not just *what* it does.
+- **Subagents (owner's standing preference):** use them where appropriate, such as parallel research, broad searches and independent lookups. Pick the model by difficulty: **Sonnet** for moderately complex work, **Haiku** for simple lookups. Core concepts the owner types are never delegated.
 
 ## Branching and CI/CD
 - Never commit to `main`. Work on `<type>/<slug>` branches (`feat/`, `fix/`, `chore/`, `docs/`), open a PR, let CI pass, squash-merge. A GitHub ruleset enforces this (ADR 0003); a pre-commit hook catches local mistakes.

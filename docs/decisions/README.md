@@ -9,6 +9,7 @@ A record is never edited after the fact. If a decision changes, write a new reco
 | [0001](0001-hand-rolled-agent-loop.md) | Hand-rolled agent loop on the `anthropic` SDK | Accepted |
 | [0002](0002-haiku-first-models.md) | Every agent starts on Claude Haiku 5.5; upgrade per agent only on eval evidence | Accepted |
 | [0003](0003-public-repo-and-branch-rules.md) | Public repo, PR-only `main` enforced by a GitHub ruleset | Accepted |
+| [0004](0004-demo-task-and-data-sources.md) | Football finance analyst: SEC XBRL live + human-verified club dataset | Accepted |
 
 ## Template
 

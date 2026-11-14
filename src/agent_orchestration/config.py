@@ -12,6 +12,11 @@ class Settings(BaseSettings):
     # only at the point of use.
     anthropic_api_key: SecretStr | None = None
 
+    # Data sources. SEC requires "Name contact-email" in the User-Agent; we use a project alias.
+    # It isn't secret, but it's still contact info, so it lives in .env rather than the code.
+    sec_user_agent: str | None = None
+    companies_house_api_key: SecretStr | None = None
+
     # Haiku-first policy (docs/decisions/0002): every agent starts on Haiku and is upgraded
     # individually only when an eval shows the cheaper model is the bottleneck.
     default_model: str = "claude-haiku-5-5"
