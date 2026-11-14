@@ -1,6 +1,6 @@
 # 0004. Demo task and data sources: football finance analyst
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-11-14
 
 ## Context
