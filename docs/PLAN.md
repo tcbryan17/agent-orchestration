@@ -28,8 +28,8 @@ The backend emits the full event format. An export script converts it to the sit
 
 | # | Branch | Goal | You type |
 |---|---|---|---|
-| 0 | `chore/repo-setup` | CLAUDE.md, settings, CI, secret scan, ADRs 0001–0003 | — (decided branch rules) |
-| 1 | `feat/event-schema` | Event model and cost tracking | Event schema; `cost_from_usage()` including Haiku's 100K price tier |
+| 0 ✅ | `chore/repo-setup` | CLAUDE.md, settings, CI, secret scan, ADRs 0001–0003 | — (decided branch rules) |
+| 1 🚧 | `feat/event-schema` | Event model and cost tracking | Event schema; `cost_from_usage()` including Haiku's 100K price tier |
 | 2 | `feat/agent-loop` | One agent completes a task with tools | **The loop**: `stop_reason` handling, tool results, error results |
 | 3 | `feat/tools` | Researcher and Analyst tools | One `strict` tool schema plus the dispatcher |
 | 4 | `feat/supervisor` | Delegation to workers | **The handoff and the context boundary** |
@@ -62,6 +62,6 @@ Governance runs through every phase rather than being added at the end. The owne
 Mapping practices to a framework shows an approach. It is not certification or a compliance claim.
 
 ## Open decisions
-- **Demo task:** option A (peer comparison from public financial filings), steered toward **Premier League club finance and/or sports betting operators**. The data sources and the default demo are decided at scoping, after a short spike to check data availability.
+- ~~Demo task~~: **decided** in ADR 0004. It's a football finance analyst: live SEC XBRL for betting operators and Man Utd (Stage 1), then a human-verified club dataset (Stage 2).
 - **Hosting:** Render or Fly, decided at Phase 8.
 - **OpenTelemetry:** stretch goal. Our own event log is the trace; OTel export is optional.

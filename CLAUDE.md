@@ -42,5 +42,17 @@ Before calling work done, run pytest, mypy and ruff check.
 - Every agent defaults to `claude-haiku-5-5` (ADR 0002). Models are set per agent; upgrades need eval evidence and an ADR.
 - The event schema is a contract with the portfolio site's replay. Change both together.
 
-## Current status
-Phase 0 (repo setup) in progress. The demo task is still being chosen.
+## Current status (updated 2026-11-14)
+**Done:**
+- Phase 0: repo setup (PR #1).
+- Data-source spike (`docs/spikes/0001-data-sources.md`) and ADR 0004 (accepted) (PR #2): a "football finance analyst". Stage 1 uses live SEC XBRL for DraftKings, Flutter, Rush Street and Man Utd. Stage 2 adds a human-verified Premier League club dataset extracted from scanned Companies House accounts.
+
+**In progress: Phase 1, event schema.** Branch `feat/event-schema`, draft PR #3.
+- The owner is designing the `Event` fields: `TODO(human)` in `src/agent_orchestration/events.py`. The open questions: seq vs timestamp, a `parent_id` for nesting, `Decimal` vs float for money, and whether events are frozen.
+- After that: `cost_from_usage()` (Haiku 5.5 is $0.10/$0.50 per M tokens, 5x above 100K prompt tokens), export to the site's `{t, who, text}` replay format, then tests.
+
+**Owner to-dos:**
+- Add `COMPANIES_HOUSE_API_KEY` and `SEC_USER_AGENT` (a project alias) to `.env`.
+- Create an Anthropic API key with a spend limit before Phase 2.
+
+**Governance thread:** see `docs/PLAN.md` (NIST AI RMF, ISO 42001). The hash-chained audit log builds on the Event schema.
