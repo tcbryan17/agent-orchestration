@@ -50,7 +50,18 @@ The backend emits the full event format. An export script converts it to the sit
 - **Evals:** a manually triggered workflow with the API key stored as a GitHub secret and a hard cost cap. Never runs automatically.
 - **Merge to `main`:** deploy, with secrets stored on the hosting platform only.
 
+## Governance and auditability (cross-cutting, scope expansion)
+Governance runs through every phase rather than being added at the end. The owner wants it to line up with **NIST AI RMF 1.0** (Govern / Map / Measure / Manage), its **Generative AI Profile (NIST AI 600-1)**, and **ISO/IEC 42001** (AI management system). Candidate pieces, to be confirmed at scoping:
+- **Tamper-evident audit trail:** the event log is append-only and hash-chained, so any edit to past events is detectable. *(owner types)*
+- **Provenance:** every figure in a deliverable links to the source document and the tool call that fetched it. The Reviewer rejects claims without a source. *(owner types)*
+- **Policy guardrails:** for example, no betting tips or inducements in a betting-domain deliverable. Red-team prompts go into the eval set. *(owner types)*
+- **Reproducibility record per run:** model IDs, prompt versions, tool versions, settings.
+- **Human approval gate** before a deliverable counts as "published".
+- **Governance documents:** a risk register, a system card, and a controls map from NIST AI RMF subcategories and ISO 42001 requirements to concrete repo artifacts (ADRs, tests, logs, CI). *(owner writes, with guidance)*
+
+Mapping practices to a framework shows an approach. It is not certification or a compliance claim.
+
 ## Open decisions
-- **Demo task:** brainstorming. The site placeholder currently shows a payroll SaaS competitive brief.
+- **Demo task:** option A (peer comparison from public financial filings), steered toward **Premier League club finance and/or sports betting operators**. The data sources and the default demo are decided at scoping, after a short spike to check data availability.
 - **Hosting:** Render or Fly, decided at Phase 8.
 - **OpenTelemetry:** stretch goal. Our own event log is the trace; OTel export is optional.
