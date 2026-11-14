@@ -16,6 +16,7 @@ A supervisor agent breaks a business task into steps and delegates to specialist
 ## Branching and CI/CD
 - Never commit to `main`. Work on `<type>/<slug>` branches (`feat/`, `fix/`, `chore/`, `docs/`), open a PR, let CI pass, squash-merge. A GitHub ruleset enforces this (ADR 0003); a pre-commit hook catches local mistakes.
 - The owner merges PRs. Claude opens them.
+- No AI attribution in commits or PRs: no `Co-Authored-By` trailers and no "Generated with" lines. `attribution` in `.claude/settings.json` turns these off.
 - CI must never need an API key: tests use a fake client. Live tests are marked `live` and run only with `-m live`.
 
 ## Secrets
