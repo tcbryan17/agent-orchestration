@@ -1,0 +1,46 @@
+[project]
+name = "agent-orchestration"
+version = "0.1.0"
+description = "A supervisor agent delegating to specialist agents, with every step traced: tools, tokens, cost, latency"
+authors = [
+    { name = "tcbryan17" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=2.8.0",
+    "pydantic>=2.14.3",
+    "pydantic-settings>=2.16.3",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Live tests (real Anthropic API calls, cost money) are off by default; run them with `-m live`.
+addopts = "--strict-markers -m 'not live'"
+filterwarnings = ["error::DeprecationWarning"]
+markers = [
+    "live: makes real Anthropic API calls (skipped unless selected with -m live)",
+]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.1",
+    "pre-commit>=4.7.0",
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]

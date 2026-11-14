@@ -13,20 +13,25 @@ A supervisor agent breaks a business task into steps and delegates to specialist
 | Writer | Produce the deliverable | — |
 | Reviewer | Critique, send back or approve | — |
 
-## Planned stack
-Python · Claude Agent SDK (or a hand-rolled loop) · FastAPI with Server-Sent Events · Postgres for run history · OpenTelemetry traces
+## Stack
+Python 3.12 · a hand-rolled agent loop on the `anthropic` SDK ([ADR 0001](docs/decisions/0001-hand-rolled-agent-loop.md)) · Claude Haiku 5.5 by default, upgraded per agent only on eval evidence ([ADR 0002](docs/decisions/0002-haiku-first-models.md)) · FastAPI with Server-Sent Events · Postgres for run history
 
 ## Event stream (used by the site)
 ```
 GET /runs/{id}/events   (text/event-stream)
-data: { "t": ms, "agent": str, "type": "plan|tool_call|tool_result|message|handoff|done",
-        "text": str, "tokens": int, "cost_usd": float }
 ```
-The UI renders these as a live timeline. Save one run's events to `replay/sample-run.json`. The portfolio site plays it as this project's demo.
+The exact event schema is defined in Phase 1 (see [docs/PLAN.md](docs/PLAN.md)). The UI renders events as a live timeline. One run's events are saved to `replay/sample-run.json`, and an export script converts them to the format the portfolio site's replay player reads.
+
+## Development
+```bash
+uv sync && uv run pre-commit install
+uv run pytest && uv run mypy src tests && uv run ruff check .
+```
+All changes go through a branch, a PR and green CI ([ADR 0003](docs/decisions/0003-public-repo-and-branch-rules.md)). Decisions are recorded in [`docs/decisions/`](docs/decisions/).
 
 ## Guardrails
 - A hard cap on agent turns and dollars per run
 - A rate-limited public demo, plus a "bring your own task" option only for allowlisted visitors
 
 ## Status
-Planned
+In progress: Phase 0 (repo setup). Plan: [docs/PLAN.md](docs/PLAN.md)
