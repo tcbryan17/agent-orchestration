@@ -16,7 +16,7 @@ Supervisor (manual loop, ADR 0001)
    ├─▶ Writer                                  │
    └─▶ Reviewer ── approve | revise(notes) ────┘
    │
-   every step ──▶ Event(t, run_id, agent, type, text, tokens, cost_usd, …)
+   every step ──▶ Event(run_id, seq, ts, parent_id, agent, type, text, usage, cost_usd, …)
                     ├─▶ Postgres (run history)
                     └─▶ SSE  GET /runs/{id}/events ──▶ live timeline
                                        └─▶ export ──▶ replay/sample-run.json ──▶ portfolio site
@@ -29,7 +29,7 @@ The backend emits the full event format. An export script converts it to the sit
 | # | Branch | Goal | You type |
 |---|---|---|---|
 | 0 ✅ | `chore/repo-setup` | CLAUDE.md, settings, CI, secret scan, ADRs 0001–0003 | — (decided branch rules) |
-| 1 🚧 | `feat/event-schema` | Event model and cost tracking | Event schema; `cost_from_usage()` including Haiku's 100K price tier |
+| 1 ✅ | `feat/event-schema` | Event model and cost tracking | Event schema; `cost_from_usage()` including Haiku's 100K price tier |
 | 2 | `feat/agent-loop` | One agent completes a task with tools | **The loop**: `stop_reason` handling, tool results, error results |
 | 3 | `feat/tools` | Researcher and Analyst tools | One `strict` tool schema plus the dispatcher |
 | 4 | `feat/supervisor` | Delegation to workers | **The handoff and the context boundary** |
