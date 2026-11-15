@@ -50,14 +50,22 @@ Under Claude Code's Bash sandbox, `uv` can't write its usual cache, so prefix co
 **Done:**
 - Phase 0: repo setup (PR #1).
 - Data-source spike (`docs/spikes/0001-data-sources.md`) and ADR 0004 (accepted) (PR #2): a "football finance analyst". Stage 1 uses live SEC XBRL for DraftKings, Flutter, Rush Street and Man Utd. Stage 2 adds a human-verified Premier League club dataset extracted from scanned Companies House accounts.
-- Phase 1: event schema and cost tracking (PR #3, ready for the owner to merge).
+- Phase 1: event schema and cost tracking (PR #3, merged 2026-11-15).
   - `events.py` (owner-designed): a frozen `Event` with `run_id`/`event_id`/`parent_id` (a tree, for provenance), a recorder-assigned `seq` for order plus a UTC-aware `ts`, `agent`/`type`/`text`/`payload`, and model-call fields (`model`, `usage`, `Decimal` `cost_usd`, `latency_ms`).
   - `pricing.py`: `cost_from_usage()` (owner-implemented). Haiku 5.5 rates were checked against the pricing page on 2026-11-15. A prompt over 100K tokens (input + cache writes + cache reads) reprices the whole request. Unknown models raise `KeyError`.
   - `replay.py`: `to_site_events()` exports to the site's `{t, who, text}` format, with real elapsed time, hidden model calls and tool results, and run totals on the last line. There's no CLI script yet; it waits for the recorder's file format in Phase 2.
   - 28 tests, including the `Event` guarantees and the pricing edge cases.
 - Security review (2026-11-15): no secrets in files or history, no known dependency vulnerabilities, CI can't reach secrets from PRs. Dependabot is on.
 
-**Next: Phase 2, the agent loop** (`feat/agent-loop`). The owner types the loop and `stop_reason` handling. Claude scaffolds the fake client for tests and the recorder that assigns `seq`. Tool results from SEC/Companies House are untrusted text going into a model that can call tools, so design the dispatch with prompt injection in mind.
+**Next: Phase 2, the agent loop** (`feat/agent-loop`, branched from an up-to-date `main`). Pick up here:
+1. If this docs PR (`docs/phase-2-pickup`) is still open, the owner merges it first.
+2. Claude scaffolds (boilerplate):
+   - a `Recorder` that hands out `seq`, holds the `run_id` and collects events;
+   - a fake Anthropic client that replays scripted responses, so tests never need a key;
+   - the function signature and tests around the loop.
+3. Then a single `TODO(human)`: the owner types the loop. It sends messages, branches on `stop_reason` (`end_turn`, `tool_use`, `max_tokens`, `refusal`), runs tools, sends results back (including error results), and emits `MODEL_CALL` / `TOOL_CALL` / `TOOL_RESULT` events with `cost_from_usage()`. Walk the owner through it line by line with the "why" for each line, which is what worked best in Phase 1.
+4. Tool results from SEC/Companies House are untrusted text going into a model that can call tools, so design the dispatch with prompt injection in mind.
+5. A live test (`-m live`) needs the owner's Anthropic key; unit tests don't.
 
 **Owner to-dos:**
 - Add `COMPANIES_HOUSE_API_KEY` and `SEC_USER_AGENT` (a project alias) to `.env`.
