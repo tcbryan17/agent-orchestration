@@ -12,13 +12,17 @@ schema has to serve all of them at once:
 Whatever isn't captured here at the moment it happens can't be reconstructed later.
 """
 
+from datetime import UTC, datetime
+from decimal import Decimal
 from enum import StrEnum
+from typing import Any
+from uuid import UUID, uuid4
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 
 
 class EventType(StrEnum):
-    """What kind of step an event records. Adjust freely while designing `Event`."""
+    """What kind of step an event records."""
 
     RUN_STARTED = "run_started"
     PLAN = "plan"  # the supervisor's plan or re-plan
@@ -51,14 +55,25 @@ class TokenUsage(BaseModel):
 class Event(BaseModel):
     """One step in a run. See the module docstring for the four consumers it must serve."""
 
-    # TODO(human): define the fields of an Event (aim for about 8-10 lines).
-    #
-    # Questions to answer with your field choices:
-    #   - Identity and ordering: how do you identify a run and an event, and how do you
-    #     order events reliably (a timestamp, a sequence number, or both)?
-    #   - Who and what: which agent, which EventType, and what's shown on the timeline?
-    #   - Nesting: a worker's tool call happens inside a supervisor handoff. How does an
-    #     event point at the step that caused it?
-    #   - Cost: where do TokenUsage and the dollar cost live, and which type holds money?
-    #   - Reproducibility: what tells an auditor which model produced this step?
-    #   - Mutability: should an Event be changeable after it's created (model_config)?
+    model_config = ConfigDict(frozen=True)
+
+    # Identity and lineage
+    run_id: UUID
+    event_id: UUID = Field(default_factory=uuid4)
+    parent_id: UUID | None = None
+
+    # Ordering: seq is assigned by the recorder; ts is for display and latency
+    seq: int
+    ts: AwareDatetime = Field(default_factory=lambda: datetime.now(UTC))
+
+    # Who and what (the replay's {t, who, text})
+    agent: str
+    type: EventType
+    text: str
+    payload: dict[str, Any] = Field(default_factory=dict)
+
+    # Model calls only
+    model: str | None = None
+    usage: TokenUsage | None = None
+    cost_usd: Decimal | None = None
+    latency_ms: int | None = None
