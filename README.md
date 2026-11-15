@@ -20,7 +20,7 @@ Python 3.12 · a hand-rolled agent loop on the `anthropic` SDK ([ADR 0001](docs/
 ```
 GET /runs/{id}/events   (text/event-stream)
 ```
-The exact event schema is defined in Phase 1 (see [docs/PLAN.md](docs/PLAN.md)). The UI renders events as a live timeline. One run's events are saved to `replay/sample-run.json`, and an export script converts them to the format the portfolio site's replay player reads.
+Every step emits one frozen `Event` ([`events.py`](src/agent_orchestration/events.py)): which run and which parent step it belongs to, its order (`seq`) and time, the agent, the kind of step, and for model calls the model, token usage, exact `Decimal` cost and latency. The UI renders events as a live timeline. One run's events are saved to `replay/`, and [`replay.py`](src/agent_orchestration/replay.py) converts them to the `{t, who, text}` format the portfolio site's replay player reads.
 
 ## Development
 ```bash
@@ -34,4 +34,4 @@ All changes go through a branch, a PR and green CI ([ADR 0003](docs/decisions/00
 - A rate-limited public demo, plus a "bring your own task" option only for allowlisted visitors
 
 ## Status
-In progress: Phase 0 (repo setup). Plan: [docs/PLAN.md](docs/PLAN.md)
+Phase 1 (event schema and cost tracking) is complete; next is Phase 2 (the agent loop). The demo task is a **football finance analyst** comparing Premier League clubs and sports-betting operators from their public filings ([ADR 0004](docs/decisions/0004-demo-task-and-data-sources.md)). Plan: [docs/PLAN.md](docs/PLAN.md)
