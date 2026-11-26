@@ -1,0 +1,10 @@
+# EXAMPLE task. Not a real eval item: the expected values are placeholders.
+# Copy this file, give it a new id, and fill `expected` from the SEC XBRL data
+# (the owner verifies every number by hand before it counts as ground truth).
+id = "example-01"
+tier = "single_company"
+prompt = "How did DraftKings' revenue change between its last two fiscal years? Cite the filing."
+
+[expected]
+revenue_latest = "TODO(owner): fill from XBRL"
+revenue_prior = "TODO(owner): fill from XBRL"

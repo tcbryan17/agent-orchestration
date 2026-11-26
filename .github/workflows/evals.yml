@@ -1,0 +1,28 @@
+name: Evals
+
+# Never runs automatically: only when someone clicks "Run workflow". It spends real money
+# (the API key is a repository secret), so the dollar cap is an explicit input.
+on:
+  workflow_dispatch:
+    inputs:
+      max_usd:
+        description: "Hard dollar cap for the whole suite"
+        default: "2"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run python scripts/run_eval.py --max-usd "$MAX_USD"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MAX_USD: ${{ inputs.max_usd }}

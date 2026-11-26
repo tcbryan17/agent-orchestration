@@ -1,0 +1,9 @@
+# EXAMPLE task. Not a real eval item: the expected values are placeholders.
+id = "example-02"
+tier = "two_company_comparison"
+prompt = "Compare the latest fiscal-year revenue of DraftKings and Flutter. Are they comparable?"
+
+[expected]
+draftkings_revenue = "TODO(owner): fill from XBRL"
+flutter_revenue = "TODO(owner): fill from XBRL"
+comparable_note = "TODO(owner): say what makes the two figures (not) comparable"
