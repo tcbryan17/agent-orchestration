@@ -41,10 +41,8 @@ GDPR also applies. Events can hold personal data: director names from filings, a
   - Cons: latency and wasted queries.
 
 ## Decision
-*Owner to decide.* Claude's recommendation:
-- psycopg 3 with raw SQL, to keep one pattern across both repos;
-- one append-only `events` table, with personal data kept out of chained fields;
-- an in-process queue for SSE, with polling by `seq` as the reconnect path.
+- **Database access: psycopg 3 + raw SQL + numbered `.sql` migrations.** Chosen by the owner on 2026-11-26.
+- **Event table shape and SSE feed: still open.** Claude recommends one append-only `events` table, with personal data kept out of chained fields, and an in-process queue for SSE with polling by `seq` for reconnects. To be settled when Phase 6 starts.
 
 ## Why
 *Owner to write: the reasoning, and what we trade away.*
