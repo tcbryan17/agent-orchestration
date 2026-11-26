@@ -9,6 +9,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "anthropic>=2.8.0",
+    "httpx2>=2.16.0",
     "pydantic>=2.14.3",
     "pydantic-settings>=2.16.3",
 ]
@@ -31,6 +32,7 @@ addopts = "--strict-markers -m 'not live'"
 filterwarnings = ["error::DeprecationWarning"]
 markers = [
     "live: makes real Anthropic API calls (skipped unless selected with -m live)",
+    "human_todo: acceptance tests for a concept stub the owner writes (skipped until then)",
 ]
 
 [tool.mypy]
