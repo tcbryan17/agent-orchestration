@@ -1,0 +1,19 @@
+{
+  "_note": "Trimmed SYNTHETIC fixture shaped like SEC companyfacts. Not real figures.",
+  "cik": 1883685,
+  "entityName": "DraftKings Inc. (synthetic)",
+  "facts": {
+    "us-gaap": {
+      "Revenues": {
+        "label": "Revenues",
+        "units": {
+          "USD": [
+            {"end": "2023-12-31", "val": 1000, "accn": "0000000000-24-000001", "fy": 2023, "fp": "FY", "form": "10-K", "filed": "2024-02-20"},
+            {"end": "2023-09-30", "val": 250, "accn": "0000000000-23-000009", "fy": 2023, "fp": "Q3", "form": "10-Q", "filed": "2023-11-01"},
+            {"end": "2024-12-31", "val": 1500, "accn": "0000000000-25-000002", "fy": 2024, "fp": "FY", "form": "10-K", "filed": "2025-02-18"}
+          ]
+        }
+      }
+    }
+  }
+}
