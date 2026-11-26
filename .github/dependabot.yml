@@ -1,0 +1,13 @@
+# Workflows pin each action to a full commit SHA (a tag can be moved to point at other code;
+# a SHA can't). Dependabot keeps those pins current by opening a PR when a new release lands,
+# so pinning doesn't mean falling behind on security fixes.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly

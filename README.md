@@ -7,8 +7,8 @@ A supervisor agent breaks a business task into steps and delegates to specialist
 ## Agents (initial set)
 | Agent | Job | Tools |
 |-------|-----|-------|
-| Supervisor | Plan, delegate, decide when it's done | handoff |
-| Researcher | Gather facts | web_search, fetch_url |
+| Supervisor | Plan, delegate, decide when it's done | delegate_* (one per worker), finish |
+| Researcher | Gather facts | edgar_company_facts (SEC XBRL); club_financials in Stage 2 ([ADR 0004](docs/decisions/0004-demo-task-and-data-sources.md)) |
 | Analyst | Structure and compare | build_table, calculator |
 | Writer | Produce the deliverable | — |
 | Reviewer | Critique, send back or approve | — |
@@ -34,4 +34,4 @@ All changes go through a branch, a PR and green CI ([ADR 0003](docs/decisions/00
 - A rate-limited public demo, plus a "bring your own task" option only for allowlisted visitors
 
 ## Status
-Phase 1 (event schema and cost tracking) is complete; next is Phase 2 (the agent loop). The demo task is a **football finance analyst** comparing Premier League clubs and sports-betting operators from their public filings ([ADR 0004](docs/decisions/0004-demo-task-and-data-sources.md)). Plan: [docs/PLAN.md](docs/PLAN.md)
+Phase 1 (event schema and cost tracking) is complete. Phases 2 to 7 are scaffolded: the plumbing is built and each core concept is a stub I write by hand, with a guide in [docs/concepts/](docs/concepts/) and acceptance tests in `tests/concepts/`. Next is C1, the agent loop. The demo task is a **football finance analyst** comparing Premier League clubs and sports-betting operators from their public filings ([ADR 0004](docs/decisions/0004-demo-task-and-data-sources.md)). Plan: [docs/PLAN.md](docs/PLAN.md). Governance: [docs/governance/](docs/governance/).
