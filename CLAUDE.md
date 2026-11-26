@@ -12,7 +12,7 @@ A supervisor agent breaks a business task into steps and delegates to specialist
 - **Claude writes boilerplate**: project config, CI, FastAPI/SSE plumbing, DB models, Docker, fakes for tests, export scripts.
 - **Small choices: just decide** and mention the choice in one line. **Architectural choices: ask** with options and a recommendation, then record the decision in `docs/decisions/` (never edit an accepted record; supersede it).
 - Explain *why* something works, not just *what* it does.
-- **Subagents (owner's standing preference):** use them where appropriate, such as parallel research, broad searches and independent lookups. Pick the model by difficulty: **Sonnet** for moderately complex work, **Haiku** for simple lookups. Core concepts the owner types are never delegated.
+- **Subagents (owner's standing preference):** use them where appropriate, such as parallel research, broad searches and independent lookups. Pick the model by difficulty: **Sonnet** for moderately complex work, **Haiku** for simple lookups. Core concepts the owner types are never delegated. Since 2026-11-26: **Sonnet** subagents write all implementation code, **Opus** only reviews written code against the tests and plan, and **Fable** is reserved for very important, wide-ranging problems.
 
 ## Branching and CI/CD
 - Never commit to `main`. Work on `<type>/<slug>` branches (`feat/`, `fix/`, `chore/`, `docs/`), open a PR, let CI pass, squash-merge. A GitHub ruleset enforces this (ADR 0003); a pre-commit hook catches local mistakes.
@@ -46,7 +46,7 @@ Under Claude Code's Bash sandbox, `uv` can't write its usual cache, so prefix co
 - Every agent defaults to `claude-haiku-5-5` (ADR 0002). Models are set per agent; upgrades need eval evidence and an ADR.
 - The event schema is a contract with the portfolio site's replay. Change both together.
 
-## Current status (updated 2026-11-15)
+## Current status (updated 2026-11-26)
 **Done:**
 - Phase 0: repo setup (PR #1).
 - Data-source spike (`docs/spikes/0001-data-sources.md`) and ADR 0004 (accepted) (PR #2): a "football finance analyst". Stage 1 uses live SEC XBRL for DraftKings, Flutter, Rush Street and Man Utd. Stage 2 adds a human-verified Premier League club dataset extracted from scanned Companies House accounts.
@@ -56,21 +56,20 @@ Under Claude Code's Bash sandbox, `uv` can't write its usual cache, so prefix co
   - `replay.py`: `to_site_events()` exports to the site's `{t, who, text}` format, with real elapsed time, hidden model calls and tool results, and run totals on the last line. There's no CLI script yet; it waits for the recorder's file format in Phase 2.
   - 28 tests, including the `Event` guarantees and the pricing edge cases.
 - Security review (2026-11-15): no secrets in files or history, no known dependency vulnerabilities, CI can't reach secrets from PRs. Dependabot is on.
+- Scaffold for Phases 2–7 (PR #5, merged 2026-11-26): `Recorder`/`EventSink`, the `MessagesClient` seam and `ScriptedClient` fake, EDGAR/calculator/table tools, agent specs, prompt loader, run manifest, eval runner (manual-only `evals.yml`), `scripts/run_eval.py` and `scripts/export_replay.py`, and governance templates in `docs/governance/` (NIST AI RMF, AI 600-1, EU AI Act, ISO 42001, GDPR/UK GDPR).
+- GitHub Actions and pre-commit hooks pinned to commit SHAs; `.github/dependabot.yml` keeps the pins current.
 
-**Next: Phase 2, the agent loop** (`feat/agent-loop`, branched from an up-to-date `main`). Pick up here:
-1. If this docs PR (`docs/phase-2-pickup`) is still open, the owner merges it first.
-2. Claude scaffolds (boilerplate):
-   - a `Recorder` that hands out `seq`, holds the `run_id` and collects events;
-   - a fake Anthropic client that replays scripted responses, so tests never need a key;
-   - the function signature and tests around the loop.
-3. Then a single `TODO(human)`: the owner types the loop. It sends messages, branches on `stop_reason` (`end_turn`, `tool_use`, `max_tokens`, `refusal`), runs tools, sends results back (including error results), and emits `MODEL_CALL` / `TOOL_CALL` / `TOOL_RESULT` events with `cost_from_usage()`. Walk the owner through it line by line with the "why" for each line, which is what worked best in Phase 1.
-4. Tool results from SEC/Companies House are untrusted text going into a model that can call tools, so design the dispatch with prompt injection in mind.
-5. A live test (`-m live`) needs the owner's Anthropic key; unit tests don't.
+**Concepts the owner writes (C1–C12).** Each is a `TODO(human)` stub whose body only raises `NotImplementedError`; its docstring lists the options and trade-offs. Guides: `docs/concepts/`. Acceptance tests: `tests/concepts/`, marked `human_todo` and skipped until the owner deletes the file's `pytestmark` line. Claude never writes a stub body. Index: `docs/concepts/README.md`.
+
+**Next: C1, the agent loop** (`loop.py: run_agent`, guide `docs/concepts/c01-agent-loop.md`). Walk the owner through it line by line with the "why" for each line, which is what worked best in Phase 1. Then C7 (`check_budget`), which the loop calls, then C2–C4 (Phase 3).
+
+**Waiting on a decision:** Phase 6 storage, ADR 0005 (Proposed). Don't build the API, SSE stream or Postgres code until it's accepted.
 
 **Owner to-dos:**
 - Add `COMPANIES_HOUSE_API_KEY` and `SEC_USER_AGENT` (a project alias) to `.env`.
 - Create an Anthropic API key with a spend limit before Phase 2.
 - GitHub account: turn on "Keep my email addresses private" and "Block command line pushes that expose my email"; check `gh auth status` scopes, 2FA, PATs, OAuth apps, SSH keys and webhooks. Decide whether to remove the personal email from older commits.
-- Optional: a `chore/` PR pinning the pre-commit hooks and GitHub Actions to commit SHAs.
+- Add `EventType.APPROVAL` to `events.py` when reaching C9 (the approval gate).
+- Fill the "to verify" items in `docs/governance/` against the source texts.
 
 **Governance thread:** see `docs/PLAN.md` (NIST AI RMF, ISO 42001). The hash-chained audit log builds on the Event schema.

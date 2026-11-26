@@ -38,6 +38,8 @@ The backend emits the full event format. An export script converts it to the sit
 | 7 | `feat/evals` | 10–15 tasks: success rate, $/task, turns/task, compared with a single-agent baseline | The grading rubric |
 | 8 | `feat/deploy-replay` | Rate-limited deploy, recorded run, site update | — (review) |
 
+**Scaffold status (2026-11-26):** Phases 2–7 are scaffolded (PR #5). The "You type" items are now concepts C1–C12, each a stub with a guide in `docs/concepts/` and skipped tests in `tests/concepts/`. Phase 6 waits for ADR 0005.
+
 ## Constraints to design around
 - **Models (ADR 0002):** every agent starts on Haiku 5.5 and is upgraded per agent only on eval evidence.
 - **Handoffs:** the supervisor's delegation must work with `tool_choice: auto`, strict tool schemas and prompt steering. Forced tool choice isn't available on every model, so don't depend on it.
@@ -63,5 +65,6 @@ Mapping practices to a framework shows an approach. It is not certification or a
 
 ## Open decisions
 - ~~Demo task~~: **decided** in ADR 0004. It's a football finance analyst: live SEC XBRL for betting operators and Man Utd (Stage 1), then a human-verified club dataset (Stage 2).
+- **Phase 6 storage:** ADR 0005 (Proposed).
 - **Hosting:** Render or Fly, decided at Phase 8.
 - **OpenTelemetry:** stretch goal. Our own event log is the trace; OTel export is optional.
